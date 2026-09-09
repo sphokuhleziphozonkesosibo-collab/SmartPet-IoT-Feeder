@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Pet Feeder · Professional Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== LOGIN / REGISTRATION OVERLAY ===== -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-container">
+      <!-- Login Form -->
+      <div id="loginForm" class="auth-form active">
+        <div class="auth-logo">
+          <i class="fas fa-paw"></i>
+          <h2>SmartPet</h2>
+          <p>Sign in to your account</p>
+        </div>
+        <div class="auth-social">
+          <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
+          <button class="social-btn facebook"><i class="fab fa-facebook"></i> Facebook</button>
+          <button class="social-btn apple"><i class="fab fa-apple"></i> Apple</button>
+        </div>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <form id="loginFormSubmit">
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required />
+          </div>
+          <div class="auth-options">
+            <label><input type="checkbox" id="rememberMe" /> Remember me</label>
+            <a href="#" id="forgotPasswordLink">Forgot password?</a>
+          </div>
+          <button type="submit" class="auth-btn">Sign In</button>
+        </form>
+        <p class="auth-switch">Don't have an account? <a href="#" id="switchToRegister">Sign Up</a></p>
+      </div>
+
+      <!-- Registration Form -->
+      <div id="registerForm" class="auth-form">
+        <div class="auth-logo">
+          <i class="fas fa-paw"></i>
+          <h2>Create Account</h2>
+          <p>Join the SmartPet family</p>
+        </div>
+        <div class="auth-social">
+          <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
+          <button class="social-btn facebook"><i class="fab fa-facebook"></i> Facebook</button>
+        </div>
+        <div class="auth-divider"><span>or create with email</span></div>
+        <form id="registerFormSubmit">
+          <div class="form-group">
+            <label for="regFirstName">First Name</label>
+            <input type="text" id="regFirstName" placeholder="John" required />
+          </div>
+          <div class="form-group">
+            <label for="regLastName">Last Name</label>
+            <input type="text" id="regLastName" placeholder="Doe" required />
+          </div>
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <input type="email" id="regEmail" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="Min 8 characters" required minlength="8" />
+          </div>
+          <div class="form-group">
+            <label for="regConfirmPassword">Confirm Password</label>
+            <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required />
+          </div>
+          <button type="submit" class="auth-btn">Create Account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="#" id="switchToLogin">Sign In</a></p>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div id="forgotPasswordForm" class="auth-form">
+        <div class="auth-logo">
+          <i class="fas fa-paw"></i>
+          <h2>Reset Password</h2>
+          <p>We'll send you a reset link</p>
+        </div>
+        <form id="forgotPasswordSubmit">
+          <div class="form-group">
+            <label for="forgotEmail">Email Address</label>
+            <input type="email" id="forgotEmail" placeholder="john@example.com" required />
+          </div>
+          <button type="submit" class="auth-btn">Send Reset Link</button>
+        </form>
+        <p class="auth-switch"><a href="#" id="backToLogin">Back to Sign In</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOP HEADER BAR ===== -->
+  <header class="top-header" id="mainHeader" style="display:none;">
+    <div class="header-container">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <i class="fas fa-paw"></i>
+        </div>
+        <div class="logo-text">
+          <h1>SmartPet</h1>
+          <span>Feeder System</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-status">
+          <span class="status-badge online">
+            <i class="fas fa-circle"></i> <span>Online</span>
+          </span>
+        </div>
+        <button class="btn-notification" id="notificationBell">
+          <i class="fas fa-bell"></i>
+          <span class="badge" id="notifBadge">3</span>
+        </button>
+        <button class="btn-dark-mode" id="darkModeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="user-profile" id="userProfileBtn">
+          <img id="headerUserAvatar" src="https://ui-avatars.com/api/?name=Pet+Owner&background=2d7d46&color=fff&size=40" alt="User" />
+          <span id="headerUserName">John Doe</span>
+        </div>
+        <button class="btn-logout" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTAINER ===== -->
+  <div class="app-container">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar" style="display:none;">
+      <nav class="sidebar-nav">
+        <a href="#" class="active" data-page="dashboard">
+          <i class="fas fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" data-page="home">
+          <i class="fas fa-house"></i>
+          <span>Home</span>
+        </a>
+        <a href="#" data-page="user-profile">
+          <i class="fas fa-user"></i>
+          <span>My Profile</span>
+        </a>
+        <a href="#" data-page="pet-profile">
+          <i class="fas fa-dog"></i>
+          <span>Pet Profile</span>
+        </a>
+        <a href="#" data-page="feeding">
+          <i class="fas fa-utensils"></i>
+          <span>Feeding</span>
+        </a>
+        <a href="#" data-page="water">
+          <i class="fas fa-tint"></i>
+          <span>Water</span>
+        </a>
+        <a href="#" data-page="schedule">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Meal Schedule</span>
+        </a>
+        <a href="#" data-page="notifications">
+          <i class="fas fa-bell"></i>
+          <span>Notifications</span>
+        </a>
+        <a href="#" data-page="history">
+          <i class="fas fa-history"></i>
+          <span>History</span>
+        </a>
+        <a href="#" data-page="settings">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+        <a href="#" data-page="about">
+          <i class="fas fa-info-circle"></i>
+          <span>About</span>
+        </a>
+        <a href="#" data-page="support">
+          <i class="fas fa-headset"></i>
+          <span>Support</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="product-info">
+          <div class="qr-code">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <div class="product-details">
+            <span class="product-name">Smart Pet Feeder Pro</span>
+            <span class="product-version">v2.1.0</span>
+          </div>
+        </div>
+        <div class="contact-info">
+          <i class="fas fa-envelope"></i>
+          <span>support@smartpet.co.za</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+      <!-- ===== PAGE: DASHBOARD ===== -->
+      <div id="page-dashboard" class="page active">
+        <div class="page-header">
+          <div>
+            <h2>Dashboard</h2>
+            <p class="page-description">Monitor your pet feeder status and activity</p>
+          </div>
+          <div class="date-display">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="currentDate"></span>
+          </div>
+        </div>
+
+        <!-- Camera Recognition Section -->
+        <div class="camera-section">
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-video"></i> Live Pet Recognition</h3>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="action-btn" id="uploadImageBtn" style="background:#6a1b9a; color:white; border:none;">
+                  <i class="fas fa-upload"></i> Upload
+                </button>
+                <button class="action-btn" id="startCameraBtn" style="background:#2d7d46; color:white; border:none;">
+                  <i class="fas fa-play"></i> Camera
+                </button>
+                <button class="action-btn" id="stopCameraBtn" style="background:#c62828; color:white; border:none;">
+                  <i class="fas fa-stop"></i> Stop
+                </button>
+                <button class="action-btn" id="captureRecognitionBtn" style="background:#1565c0; color:white; border:none;">
+                  <i class="fas fa-sync-alt"></i> Detect
+                </button>
+                <button class="action-btn" id="autoDetectToggle" style="background:#f59e0b; color:white; border:none;">
+                  <i class="fas fa-robot"></i> Auto-Detect: OFF
+                </button>
+              </div>
+            </div>
+            <div class="camera-grid">
+              <div class="camera-feed">
+                <video id="videoFeed" autoplay playsinline style="width:100%; height:100%; object-fit:cover; display:none; border-radius:8px;"></video>
+                <img id="uploadedImageDisplay" style="width:100%; height:100%; object-fit:contain; display:none; border-radius:8px; background:#f8f9fa;" alt="Uploaded image" />
+                <div id="cameraPlaceholder" style="display:flex; align-items:center; justify-content:center; height:250px; color:#94a3b8; flex-direction:column; gap:8px; background:#f8f9fa; border-radius:8px;">
+                  <i class="fas fa-image" style="font-size:36px;"></i>
+                  <p>Upload image or start camera</p>
+                  <p style="font-size:0.75rem;">Click "Upload" or "Camera" to begin</p>
+                </div>
+                <canvas id="cameraCanvas" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
+              </div>
+              <div class="recognition-result">
+                <h4 style="margin-bottom:10px; font-size:0.85rem;">Recognition Result</h4>
+                <div id="recognitionResult">
+                  <div style="text-align:center; padding:30px 0; color:#94a3b8;">
+                    <i class="fas fa-search" style="font-size:28px; display:block; margin-bottom:8px;"></i>
+                    <p>No detection yet</p>
+                    <p style="font-size:0.75rem;">Upload an image or click "Detect"</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon food"><i class="fas fa-bowl-food"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Food Level</span>
+              <span class="stat-value" id="foodLevelDisplay">72%</span>
+              <div class="stat-progress"><div class="progress-bar"><div class="progress-fill" id="foodProgressFill" style="width:72%;"></div></div></div>
+            </div>
+            <div class="stat-controls">
+              <button class="ctrl-btn" id="foodDecBtn">−</button>
+              <button class="ctrl-btn set-btn" id="setFoodBtn">Set</button>
+              <button class="ctrl-btn" id="foodIncBtn">+</button>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon water"><i class="fas fa-droplet"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Water Level</span>
+              <span class="stat-value" id="waterLevelDisplay">85%</span>
+              <div class="stat-progress"><div class="progress-bar"><div class="progress-fill" id="waterProgressFill" style="width:85%;"></div></div></div>
+            </div>
+            <button class="action-btn" id="checkWaterBtn"><i class="fas fa-sync-alt"></i> Check</button>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon quality"><i class="fas fa-flask"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">TDS Quality</span>
+              <span class="stat-value" id="tdsValue">145 ppm</span>
+              <div class="tds-status" id="tdsStatus"><span class="badge good">✓ Good</span></div>
+            </div>
+            <button class="action-btn" id="checkTdsBtn"><i class="fas fa-vial"></i> Test</button>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon meals"><i class="fas fa-utensils"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Today's Meals</span>
+              <span class="stat-value" id="todayMealsCount">0</span>
+              <span class="stat-sub">Next: <strong id="nextMealDisplay">6:00 PM</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="quick-action-card">
+            <div class="action-icon"><i class="fas fa-hand"></i></div>
+            <h4>Manual Feed</h4>
+            <p>Dispense food on demand</p>
+            <button class="action-btn primary" id="quickFeedBtn">Feed Now</button>
+          </div>
+          <div class="quick-action-card">
+            <div class="action-icon"><i class="fas fa-robot"></i></div>
+            <h4>Auto Mode</h4>
+            <p>Automatic feeding</p>
+            <button class="action-btn" id="quickAutoBtn">Configure</button>
+          </div>
+          <div class="quick-action-card">
+            <div class="action-icon"><i class="fas fa-camera"></i></div>
+            <h4>Pet Recognition</h4>
+            <p>Identify your pet</p>
+            <button class="action-btn" id="quickRecogBtn">View</button>
+          </div>
+          <div class="quick-action-card">
+            <div class="action-icon"><i class="fas fa-calendar-plus"></i></div>
+            <h4>Schedule</h4>
+            <p>Set feeding times</p>
+            <button class="action-btn" id="quickScheduleBtn">Manage</button>
+          </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="two-column">
+          <div class="column-left">
+            <div class="card">
+              <div class="card-header"><h3><i class="fas fa-bolt"></i> Recent Activity</h3></div>
+              <ul id="miniActivityList" class="activity-list"><li><i class="fas fa-check-circle" style="color:#2d7d46;"></i> System ready</li></ul>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-sliders-h"></i> Feeding Mode</h3>
+                <span class="card-subtitle" id="currentModeDisplay">Automatic</span>
+              </div>
+              <div class="mode-toggle">
+                <button class="mode-btn" data-mode="manual">Manual</button>
+                <button class="mode-btn active" data-mode="automatic">Automatic</button>
+              </div>
+              <div id="manualPanel" class="manual-panel hidden">
+                <div class="amount-control">
+                  <label>Portion size</label>
+                  <div class="amount-control-group">
+                    <button id="amountDecBtn"><i class="fas fa-minus"></i></button>
+                    <span id="manualAmountDisplay">30</span>
+                    <span class="unit">g</span>
+                    <button id="amountIncBtn"><i class="fas fa-plus"></i></button>
+                  </div>
+                </div>
+                <button class="feed-btn" id="feedNowBtn"><i class="fas fa-play"></i> Feed Now</button>
+              </div>
+              <div id="autoPanel" class="auto-panel">
+                <div class="auto-status"><i class="fas fa-check-circle" style="color:#2d7d46;"></i> <span>Automatic feeding enabled</span></div>
+                <p class="hint">The feeder will dispense food according to your schedule.</p>
+                <div class="auto-features">
+                  <span><i class="fas fa-clock"></i> Schedule-based</span>
+                  <span><i class="fas fa-wifi"></i> WiFi connected</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column-right">
+            <div class="card">
+              <div class="card-header"><h3><i class="fas fa-dog"></i> Current Recognition</h3></div>
+              <div id="recognitionStatus">
+                <div class="recog-pet">
+                  <div class="pet-avatar"><img id="petAvatarImg" src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=80&h=80&fit=crop&crop=center" alt="Pet" /></div>
+                  <div class="pet-info">
+                    <span class="pet-name" id="recogPetName">Buddy</span>
+                    <span class="pet-status authorized" id="recogAuthBadge">✓ Authorized</span>
+                  </div>
+                </div>
+                <div class="recog-details">
+                  <div><span class="recog-label">Confidence</span><span class="recog-value" id="recogConfidence">94.7%</span></div>
+                  <div><span class="recog-label">Last detection</span><span class="recog-value" id="recogTime">12:32 PM</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3><i class="fas fa-chart-simple"></i> Quick Stats</h3></div>
+              <div class="quick-stats-grid">
+                <div class="quick-stat"><span class="qs-label">Total Feedings</span><span class="qs-value" id="totalFeedings">0</span></div>
+                <div class="quick-stat"><span class="qs-label">Today's Feedings</span><span class="qs-value" id="todayFeedings">0</span></div>
+                <div class="quick-stat"><span class="qs-label">Food Remaining</span><span class="qs-value" id="foodRemaining">72%</span></div>
+                <div class="quick-stat"><span class="qs-label">System Status</span><span class="qs-value online">Online</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE: HOME ===== -->
+      <div id="page-home" class="page">
+        <div class="home-hero">
+          <div class="home-hero-content">
+            <h1>Welcome to SmartPet</h1>
+            <p>South Africa's leading smart pet feeding solution</p>
+            <div class="home-hero-buttons">
+              <button class="action-btn primary" onclick="navigateTo('dashboard')">Get Started</button>
+              <button class="action-btn" onclick="navigateTo('about')">Learn More</button>
+            </div>
+          </div>
+        </div>
+        <div class="home-grid">
+          <div class="home-card">
+            <i class="fas fa-paw" style="font-size:48px; color:#2d7d46;"></i>
+            <h3>Smart Pet Feeding</h3>
+            <p>Automated feeding with pet recognition technology. Never miss a meal for your furry friend.</p>
+          </div>
+          <div class="home-card">
+            <i class="fas fa-camera" style="font-size:48px; color:#1565c0;"></i>
+            <h3>Pet Recognition</h3>
+            <p>Advanced AI technology identifies your pet and dispenses food only to authorized animals.</p>
+          </div>
+          <div class="home-card">
+            <i class="fas fa-mobile-alt" style="font-size:48px; color:#6a1b9a;"></i>
+            <h3>Remote Control</h3>
+            <p>Monitor and control your pet feeder from anywhere using our web dashboard.</p>
+          </div>
+          <div class="home-card">
+            <i class="fas fa-chart-line" style="font-size:48px; color:#e65100;"></i>
+            <h3>Health Monitoring</h3>
+            <p>Track feeding patterns, water quality, and food consumption for better pet health.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE: USER PROFILE ===== -->
+      <div id="page-user-profile" class="page">
+        <div class="page-header">
+          <h2>👤 My Profile</h2>
+          <p class="page-description">Manage your personal information</p>
+        </div>
+        <div class="user-profile-card">
+          <div class="user-profile-header">
+            <div class="user-avatar-large"><img id="userAvatarImg" src="https://ui-avatars.com/api/?name=Pet+Owner&background=2d7d46&color=fff&size=120" alt="User Avatar" />
+              <button class="avatar-upload-btn" id="uploadAvatarBtn"><i class="fas fa-camera"></i></button>
+            </div>
+            <div class="user-name-display">
+              <h2 id="displayUserName">John Doe</h2>
+              <p id="displayUserEmail">john.doe@email.com</p>
+              <span class="user-status-badge">Pet Owner</span>
+            </div>
+          </div>
+          <div class="user-profile-form">
+            <div class="form-section">
+              <h3>Personal Information</h3>
+              <div class="form-grid">
+                <div class="form-group"><label for="userFirstName">First Name</label><input type="text" id="userFirstName" placeholder="John" /></div>
+                <div class="form-group"><label for="userLastName">Last Name</label><input type="text" id="userLastName" placeholder="Doe" /></div>
+                <div class="form-group"><label for="userEmail">Email Address</label><input type="email" id="userEmail" placeholder="john.doe@email.com" /></div>
+                <div class="form-group"><label for="userPhone">Phone Number</label><input type="tel" id="userPhone" placeholder="+27 82 123 4567" /></div>
+                <div class="form-group"><label for="userAddress">Address</label><input type="text" id="userAddress" placeholder="123 Main Street" /></div>
+                <div class="form-group"><label for="userCity">City</label><input type="text" id="userCity" placeholder="Cape Town" /></div>
+                <div class="form-group"><label for="userProvince">Province</label>
+                  <select id="userProvince">
+                    <option value="Western Cape">Western Cape</option>
+                    <option value="Gauteng">Gauteng</option>
+                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                    <option value="Eastern Cape">Eastern Cape</option>
+                    <option value="Free State">Free State</option>
+                    <option value="Limpopo">Limpopo</option>
+                    <option value="Mpumalanga">Mpumalanga</option>
+                    <option value="North West">North West</option>
+                    <option value="Northern Cape">Northern Cape</option>
+                  </select>
+                </div>
+                <div class="form-group"><label for="userPostal">Postal Code</label><input type="text" id="userPostal" placeholder="8001" /></div>
+              </div>
+            </div>
+            <div class="form-section">
+              <h3>Pet Owner Details</h3>
+              <div class="form-grid">
+                <div class="form-group"><label for="userPetPreference">Pet Preference</label>
+                  <select id="userPetPreference">
+                    <option value="dogs">Dogs</option>
+                    <option value="cats">Cats</option>
+                    <option value="both">Both</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group"><label for="userExperience">Experience Level</label>
+                  <select id="userExperience">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="expert">Expert</option>
+                  </select>
+                </div>
+                <div class="form-group"><label for="userCountry">Country</label>
+                  <select id="userCountry">
+                    <option value="South Africa" selected>South Africa</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="save-btn" id="saveUserProfileBtn"><i class="fas fa-save"></i> Save Profile</button>
+              <button class="action-btn" id="cancelUserProfileBtn"><i class="fas fa-undo"></i> Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE: PET PROFILE ===== -->
+      <div id="page-pet-profile" class="page">
+        <div class="page-header">
+          <h2>🐾 Pet Profile</h2>
+          <p class="page-description">Manage your pets' information</p>
+        </div>
+        <div style="margin-bottom:16px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="action-btn primary" id="addPetBtn"><i class="fas fa-plus"></i> Add Pet</button>
+          <button class="action-btn" id="addCatBtn" style="background:#6a1b9a; color:white; border:none;"><i class="fas fa-cat"></i> Add Cat</button>
+          <button class="action-btn" id="addDogBtn" style="background:#1565c0; color:white; border:none;"><i class="fas fa-dog"></i> Add Dog</button>
+        </div>
+        <div id="petProfileCard"></div>
+      </div>
+
+      <!-- ===== PAGE: FEEDING ===== -->
+      <div id="page-feeding" class="page">
+        <div class="page-header">
+          <h2>🍖 Feeding Controls</h2>
+          <p class="page-description">Manual and automatic feeding settings</p>
+        </div>
+        <div class="two-column">
+          <div class="column-left">
+            <div class="card">
+              <div class="card-header"><h3><i class="fas fa-hand"></i> Manual Feeding</h3></div>
+              <div class="card-body">
+                <div class="amount-control">
+                  <label>Portion size</label>
+                  <div class="amount-control-group">
+                    <button id="feedPageDecBtn"><i class="fas fa-minus"></i></button>
+                    <span id="feedPageAmount">30</span><span class="unit">g</span>
+                    <button id="feedPageIncBtn"><i class="fas fa-plus"></i></button>
+                  </div>
+                </div>
+                <button class="feed-btn" id="feedPageFeedBtn"><i class="fas fa-play"></i> Feed Now</button>
+              </div>
+            </div>
+          </div>
+          <div class="column-right">
+            <div class="card">
+              <div class="card-header"><h3><i class="fas fa-robot"></i> Automatic Schedule</h3></div>
+              <div class="card-body">
+                <div class="auto-status"><i class="fas fa-check-circle" style="color:#2d7d46;"></i> <span>Automatic feeding is <strong>enabled</strong></span></div>
+                <p class="hint">The feeder will dispense food based on your meal schedule.</p>
+                <button class="action-btn" id="gotoScheduleBtn"><i class="fas fa-calendar-alt"></i> Manage Schedule</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE: WATER ===== -->
+      <div id="page-water" class="page">
+        <div class="page-header">
+          <h2>💧 Water Monitoring</h2>
+          <p class="page-description">Track water levels and quality</p>
+        </div>
+        <div id="waterMonitoringPanel"></div>
+      </div>
+
+      <!-- ===== PAGE: SCHEDULE ===== -->
+      <div id="page-schedule" class="page">
+        <div class="page-header">
+          <h2>📅 Meal Schedule</h2>
+          <p class="page-description">Create and manage feeding times</p>
+        </div>
+        <div id="mealSchedulePanel"></div>
+      </div>
+
+      <!-- ===== PAGE: NOTIFICATIONS ===== -->
+      <div id="page-notifications" class="page">
+        <div class="page-header">
+          <h2>🔔 Notifications</h2>
+          <p class="page-description">All your alerts in one place</p>
+        </div>
+        <div id="notificationPanel"></div>
+      </div>
+
+      <!-- ===== PAGE: HISTORY ===== -->
+      <div id="page-history" class="page">
+        <div class="page-header">
+          <h2>📊 Feeding History</h2>
+          <p class="page-description">Complete feeding log</p>
+        </div>
+        <div id="historyPanel"></div>
+      </div>
+
+      <!-- ===== PAGE: ABOUT ===== -->
+      <div id="page-about" class="page">
+        <div class="about-hero">
+          <div class="about-hero-content">
+            <h1>About Smart Pet Feeder</h1>
+            <p>Revolutionizing pet care in South Africa</p>
+          </div>
+        </div>
+        <div class="about-content">
+          <div class="about-card">
+            <h3>Our Mission</h3>
+            <p>To provide pet owners with intelligent, reliable, and convenient automated feeding solutions that ensure their pets are always well-fed and healthy.</p>
+          </div>
+          <div class="about-grid">
+            <div class="about-card">
+              <h4><i class="fas fa-microchip"></i> Technology</h4>
+              <p>Our Smart Pet Feeder uses advanced AI and computer vision to recognize your pet and dispense food automatically.</p>
+              <ul>
+                <li>Real-time pet recognition</li>
+                <li>Automatic portion control</li>
+                <li>WiFi connectivity</li>
+                <li>Water quality monitoring</li>
+              </ul>
+            </div>
+            <div class="about-card">
+              <h4><i class="fas fa-shield-alt"></i> Safety & Quality</h4>
+              <p>All our products meet international safety standards and are designed with your pet's well-being in mind.</p>
+              <ul>
+                <li>CE, RoHS, FC Certified</li>
+                <li>BPA-free materials</li>
+                <li>Easy to clean design</li>
+                <li>Safe for all pets</li>
+              </ul>
+            </div>
+            <div class="about-card">
+              <h4><i class="fas fa-map-marker-alt"></i> Made in South Africa</h4>
+              <p>Proudly designed and manufactured in Cape Town, South Africa, supporting local innovation and employment.</p>
+              <ul>
+                <li>Local manufacturing</li>
+                <li>Supporting local economy</li>
+                <li>African innovation</li>
+                <li>Reliable support</li>
+              </ul>
+            </div>
+            <div class="about-card">
+              <h4><i class="fas fa-leaf"></i> Sustainability</h4>
+              <p>We are committed to sustainable practices and eco-friendly manufacturing processes.</p>
+              <ul>
+                <li>Energy-efficient design</li>
+                <li>Recyclable materials</li>
+                <li>Reduced food waste</li>
+                <li>Environmentally conscious</li>
+              </ul>
+            </div>
+          </div>
+          <div class="about-card">
+            <h3>Our Story</h3>
+            <p>Smart Pet Feeder was born from a simple idea: to make pet care easier and more reliable for pet owners. Founded in Cape Town, South Africa, we've grown from a small startup to a leading provider of smart pet solutions.</p>
+            <p>Our team of engineers, designers, and pet lovers work tirelessly to create products that make a real difference in the lives of pets and their owners. We believe that technology should serve to enhance the bond between humans and animals, not replace it.</p>
+            <div class="about-stats">
+              <div class="stat">
+                <span class="number">5,000+</span>
+                <span class="label">Pet Feeders Sold</span>
+              </div>
+              <div class="stat">
+                <span class="number">10,000+</span>
+                <span class="label">Happy Pets</span>
+              </div>
+              <div class="stat">
+                <span class="number">98%</span>
+                <span class="label">Customer Satisfaction</span>
+              </div>
+              <div class="stat">
+                <span class="number">24/7</span>
+                <span class="label">Support Available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE: SUPPORT ===== -->
+      <div id="page-support" class="page">
+        <div class="page-header">
+          <h2>🆘 Support</h2>
+          <p class="page-description">Get help with your Smart Pet Feeder</p>
+        </div>
+        <div class="support-content">
+          <div class="support-card">
+            <h3><i class="fas fa-headset"></i> Contact Support</h3>
+            <p>Our support team is available to help you with any issues.</p>
+            <div class="support-info">
+              <div class="support-item">
+                <i class="fas fa-envelope" style="color:#2d7d46;"></i>
+                <div>
+                  <strong>Email</strong>
+                  <p>support@smartpet.co.za</p>
+                </div>
+              </div>
+              <div class="support-item">
+                <i class="fas fa-phone" style="color:#2d7d46;"></i>
+                <div>
+                  <strong>Phone</strong>
+                  <p>+27 (0) 82 123 4567</p>
+                </div>
+              </div>
+              <div class="support-item">
+                <i class="fas fa-clock" style="color:#2d7d46;"></i>
+                <div>
+                  <strong>Business Hours</strong>
+                  <p>Mon-Fri: 8:00 AM - 5:00 PM (SAST)</p>
+                </div>
+              </div>
+              <div class="support-item">
+                <i class="fas fa-map-marker-alt" style="color:#2d7d46;"></i>
+                <div>
+                  <strong>Address</strong>
+                  <p>123 Main Street, Cape Town, South Africa</p>
+                </div>
+              </div>
+            </div>
+            <div class="support-actions">
+              <button class="action-btn primary" id="supportEmailBtn"><i class="fas fa-envelope"></i> Email Support</button>
+              <button class="action-btn" id="supportCallBtn"><i class="fas fa-phone"></i> Call Us</button>
+              <button class="action-btn" id="supportChatBtn"><i class="fas fa-comment"></i> Live Chat</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE: SETTINGS ===== -->
+      <div id="page-settings" class="page">
+        <div class="page-header">
+          <h2>⚙ Settings</h2>
+          <p class="page-description">System configuration</p>
+        </div>
+        <div class="settings-grid">
+          <div class="setting-card">
+            <h4><i class="fas fa-database"></i> Data Management</h4>
+            <p>Reset all demo data</p>
+            <button id="resetDemoBtn" class="danger-btn">Reset Data</button>
+          </div>
+          <div class="setting-card">
+            <h4><i class="fas fa-microchip"></i> System Info</h4>
+            <p><strong>Version:</strong> 2.1.0</p>
+            <p><strong>API:</strong> <code id="apiUrlDisplay">http://YOUR-ESP32-IP</code></p>
+            <p><strong>Status:</strong> <span class="badge good">● Online</span></p>
+          </div>
+          <div class="setting-card">
+            <h4><i class="fas fa-palette"></i> Appearance</h4>
+            <p>Toggle dark mode</p>
+            <button id="settingsDarkModeBtn" class="action-btn"><i class="fas fa-moon"></i> Toggle</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ===== MODALS ===== -->
+  <div class="modal" id="mealModal">
+    <div class="modal-content">
+      <span class="modal-close" id="mealModalClose">&times;</span>
+      <h3 id="mealModalTitle">Add Meal</h3>
+      <form id="mealForm">
+        <label for="mealTime">Time</label>
+        <input type="time" id="mealTime" value="08:00" />
+        <label for="mealAmount">Amount (g)</label>
+        <input type="number" id="mealAmount" value="30" min="5" step="5" />
+        <label>Days</label>
+        <div class="day-checkboxes">
+          <label><input type="checkbox" class="day-cb" value="1" checked /> Mon</label>
+          <label><input type="checkbox" class="day-cb" value="2" checked /> Tue</label>
+          <label><input type="checkbox" class="day-cb" value="3" checked /> Wed</label>
+          <label><input type="checkbox" class="day-cb" value="4" checked /> Thu</label>
+          <label><input type="checkbox" class="day-cb" value="5" checked /> Fri</label>
+          <label><input type="checkbox" class="day-cb" value="6" checked /> Sat</label>
+          <label><input type="checkbox" class="day-cb" value="7" checked /> Sun</label>
+        </div>
+        <button type="submit" class="save-btn">Save Meal</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <h3>Confirm Feed</h3>
+      <p id="confirmMessage">Dispense 30 g for Buddy?</p>
+      <div class="modal-actions">
+        <button id="confirmCancelBtn">Cancel</button>
+        <button id="confirmFeedBtn" class="feed-btn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="hiddenAvatarInput" accept="image/*" style="display:none;" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@latest"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Visual Studio / .NET junk files
+.vs/
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS junk files
+.DS_Store
+Thumbs.db
